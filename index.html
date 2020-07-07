@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <a href="javascript:;" onclick="javascript:handleRouter('/a')">跳转到组件一</a>
+    <a href="javascript:;" onclick="javascript:handleRouter('/b')">跳转到组件二</a>
+
+    <div id="app" style="display: none;">
+        <h3 @click="handleClick">组件一《《《 不要点我</h3>
+
+        <input id="input" class="input" v-model="message" ngif="true" />
+        <div>
+            {{message}}
+        </div>
+        <!-- 这是注释 -->
+        <div class="box">
+            <p>{{message}} </p>
+        </div>
+    </div>
+
+    <div id="app2" style="display: none;">
+        <h3>组件二</h3>
+    </div>
+
+    <script src="Vm.js"></script>
+    <script>
+
+        var app = new Vm({
+            el: "#app",
+            data: {
+                message: "abc",
+                a: "今后三天下大雨",
+                b: 2
+            },
+            methods: {
+                handleClick(event) {
+                    console.log(this)
+                    console.log(event)
+                    alert('讨厌.你~不要~点~我')
+                    alert('走开你个坏蛋~~~~呀！！')
+                }
+            },
+            // created(){
+            //     console.log("组件创建了")
+            //     console.log(this);
+            // },
+            // mounted(){
+            //     console.log("组件加载完毕")
+            //     console.log(this);
+            // },
+            // destoryed(){}
+        })
+
+        var app2 = new Vm({
+            el: "#app2"
+        })
+
+        // 路由配置
+        var routes = [
+            {
+                path: "/a",
+                component: app
+            },
+            {
+                path: "/b",
+                component: app2
+            }
+        ];
+
+        function handleRouter(path) {
+            // 设置当前页面的hash值
+            window.location.hash = path;
+
+            // 循环匹配路径，显示对应的组件
+            routes.forEach(route => {
+                if (route.path === path) {
+                    route.component.$el.style.display = "block";
+                } else {
+                    route.component.$el.style.display = "none";
+                }
+            })
+        }
+
+        window.onload = function () {
+            var hash = window.location.hash.replace("#", "");
+            // 循环匹配路径，显示对应的组件
+            routes.forEach(route => {
+                if (route.path === hash) {
+                    route.component.$el.style.display = "block";
+                }
+            })
+        }
+
+    </script>
+</body>
+
+</html>
